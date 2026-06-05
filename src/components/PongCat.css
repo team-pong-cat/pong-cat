@@ -42,6 +42,20 @@
   transform: scale(0.96);
 }
 
+.hardmode-pong-cat {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: transform 0.08s ease;
+}
+
+.hardmode-pong-cat.evading {
+  transition:
+    left 0.16s ease-out,
+    top 0.16s ease-out,
+    transform 0.08s ease;
+}
+
 .pong-cat-float {
   position: fixed;
   font-size: 2rem;
@@ -68,4 +82,24 @@
     opacity: 0;
     transform: translateX(-50%) translateY(-90px);
   }
+}
+
+.hardmodeButton {
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  font-size: 2rem;
+  color: #ffffff;
+
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+}
+
+.hard {
+  background-color: #ff2d2d;
+}
+
+.normal {
+  background-color: #25ff2e;
+  color: #000;
 }
