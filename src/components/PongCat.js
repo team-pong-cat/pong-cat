@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './PongCat.css';
-import catClosed from '../assets/cat-closed.png';
-import catOpen from '../assets/cat-open.png';
-import background from '../assets/background.png';
+import PongCatBackground from './PongCatBackground';
+import PongCatCount from './PongCatCount';
+import PongCatFloat from './PongCatFloat';
+import PongCatImage from './PongCatImage';
 
 const STORAGE_KEY = 'pong-cat-count';
 const MIN_OPEN_MS = 100;
@@ -53,30 +54,17 @@ function PongCat() {
   };
 
   return (
-    <div
-      className="pong-cat-bg"
-      style={{ backgroundImage: `url(${background})` }}
-    >
-      <p className="pong-cat-count">{count.toLocaleString()}</p>
-      <img
-        className={`pong-cat-img${isOpen ? ' open' : ''}`}
-        src={isOpen ? catOpen : catClosed}
-        alt="pong cat"
+    <PongCatBackground>
+      <PongCatCount count={count} />
+      <PongCatImage
+        isOpen={isOpen}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        draggable={false}
       />
       {floats.map((f) => (
-        <span
-          key={f.id}
-          className="pong-cat-float"
-          style={{ left: f.x, top: f.y }}
-        >
-          +1
-        </span>
+        <PongCatFloat key={f.id} x={f.x} y={f.y} />
       ))}
-    </div>
+    </PongCatBackground>
   );
 }
 
