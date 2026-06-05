@@ -91,6 +91,7 @@ function PongCat() {
 
     const handleKeyDown = (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
+      if (e.repeat) return;
 
       e.preventDefault();
       isPressedRef.current = false;
