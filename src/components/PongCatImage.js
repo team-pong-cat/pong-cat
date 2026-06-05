@@ -9,7 +9,7 @@ const PongCatImage = forwardRef(function PongCatImage(
   return (
     <img
       ref={ref}
-      className={`outline-none pong-cat-img${isOpen ? ' open' : ''}`}
+      className={`pong-cat-img${isOpen ? ' open' : ''}`}
       src={isOpen ? catOpen : catClosed}
       alt="pong cat"
       role="button"
