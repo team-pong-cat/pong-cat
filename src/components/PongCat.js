@@ -4,6 +4,8 @@ import PongCatBackground from './PongCatBackground';
 import PongCatCount from './PongCatCount';
 import PongCatFloat from './PongCatFloat';
 import PongCatImage from './PongCatImage';
+import Hardmode from "./Hardmode";
+import HardmodePongCat from "./HardmodePongCat";
 
 const STORAGE_KEY = 'pong-cat-count';
 const MIN_OPEN_MS = 100;
@@ -21,6 +23,7 @@ function PongCat() {
   const closeTimerRef = useRef(null);
   const openTimeRef = useRef(0);
   const catImageRef = useRef(null);
+  const [isHardmode, setHardmode] = useState(false);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, count);
@@ -84,6 +87,8 @@ function PongCat() {
   };
 
   useEffect(() => {
+    if (isHardmode) return undefined;
+
     const handleKeyDown = (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
 
@@ -101,13 +106,22 @@ function PongCat() {
 
   return (
     <PongCatBackground>
+      <Hardmode isHardmode={isHardmode} setHardmode={setHardmode} />
       <PongCatCount count={count} />
-      <PongCatImage
-        ref={catImageRef}
-        isOpen={isOpen}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-      />
+      {isHardmode ? (
+        <HardmodePongCat
+          isOpen={isOpen}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+        />
+      ) : (
+        <PongCatImage
+          ref={catImageRef}
+          isOpen={isOpen}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+        />
+      )}
       {floats.map((f) => (
         <PongCatFloat key={f.id} x={f.x} y={f.y} />
       ))}
