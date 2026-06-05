@@ -27,6 +27,7 @@
 .pong-cat-img {
   width: 260px;
   height: auto;
+  outline: none;
   cursor: pointer;
   user-select: none;
   transition: transform 0.08s ease;
