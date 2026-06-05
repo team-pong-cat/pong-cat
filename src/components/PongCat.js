@@ -6,6 +6,7 @@ import PongCatFloat from './PongCatFloat';
 import PongCatImage from './PongCatImage';
 import Hardmode from "./Hardmode";
 import HardmodePongCat from "./HardmodePongCat";
+import popSound from '../assets/pop.mp3';
 
 const STORAGE_KEY = 'pong-cat-count';
 const MIN_OPEN_MS = 100;
@@ -69,6 +70,7 @@ function PongCat() {
   };
 
   const activatePongCat = (position) => {
+    new Audio(popSound).play().catch(() => {});
     openTimeRef.current = Date.now();
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     setIsOpen(true);

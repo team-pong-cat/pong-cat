@@ -1,5 +1,6 @@
 import catOpen from "../assets/cat-open.png";
 import catClosed from "../assets/cat-closed.png";
+import whipSound from "../assets/whip.mp3";
 import { useEffect, useRef, useState } from "react";
 
 const CAT_SIZE = 260;
@@ -39,6 +40,7 @@ function HardmodePongCat({ isOpen, onMouseDown, onMouseUp }) {
     evadeDelayTimerRef.current = setTimeout(() => {
       evadeDelayTimerRef.current = null;
       isEvadingRef.current = true;
+      new Audio(whipSound).play().catch(() => {});
       setIsEvading(true);
       setPosition(getRandomPosition());
 
