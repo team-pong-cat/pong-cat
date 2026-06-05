@@ -1,0 +1,70 @@
+.pong-cat-bg {
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.pong-cat-count {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow:
+    0 0 8px rgba(0, 0, 0, 0.9),
+    2px 2px 0 rgba(0, 0, 0, 0.6);
+  margin: 0 0 24px 0;
+  letter-spacing: 2px;
+  user-select: none;
+}
+
+.pong-cat-img {
+  width: 260px;
+  height: auto;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.08s ease;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+}
+
+.pong-cat-img:hover {
+  transform: scale(1.04);
+}
+
+.pong-cat-img.open {
+  transform: scale(0.96);
+}
+
+.pong-cat-float {
+  position: fixed;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffe94d;
+  text-shadow:
+    0 0 6px rgba(0, 0, 0, 0.7),
+    1px 1px 0 rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: floatUp 0.9s ease-out forwards;
+  user-select: none;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-90px);
+  }
+}

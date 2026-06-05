@@ -1,5 +1,7 @@
+import PongCat from './components/PongCat';
+
 function App() {
-  return <div>Hello</div>;
+  return <PongCat />;
 }
 
 export default App;
