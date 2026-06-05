@@ -20,6 +20,7 @@ function PongCat() {
   const floatIdRef = useRef(0);
   const closeTimerRef = useRef(null);
   const openTimeRef = useRef(0);
+  const catImageRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, count);
@@ -34,18 +35,47 @@ function PongCat() {
     }, delay);
   };
 
-  const handleMouseDown = (e) => {
-    isPressedRef.current = true;
+  const getFloatPosition = (e) => {
+    if (typeof e.clientX === 'number' && typeof e.clientY === 'number') {
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    };
+  };
+
+  const getCatCenterPosition = () => {
+    if (!catImageRef.current) return { x: 0, y: 0 };
+
+    const rect = catImageRef.current.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    };
+  };
+
+  const addFloat = (position) => {
+    const id = floatIdRef.current++;
+    setFloats((prev) => [...prev, { id, ...position }]);
+    setTimeout(() => {
+      setFloats((prev) => prev.filter((f) => f.id !== id));
+    }, 900);
+  };
+
+  const activatePongCat = (position) => {
     openTimeRef.current = Date.now();
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     setIsOpen(true);
     setCount((prev) => prev + 1);
+    addFloat(position);
+  };
 
-    const id = floatIdRef.current++;
-    setFloats((prev) => [...prev, { id, x: e.clientX, y: e.clientY }]);
-    setTimeout(() => {
-      setFloats((prev) => prev.filter((f) => f.id !== id));
-    }, 900);
+  const handleMouseDown = (e) => {
+    isPressedRef.current = true;
+    activatePongCat(getFloatPosition(e));
   };
 
   const handleMouseUp = () => {
@@ -53,10 +83,27 @@ function PongCat() {
     scheduleClose();
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+
+      e.preventDefault();
+      isPressedRef.current = false;
+      activatePongCat(getCatCenterPosition());
+      scheduleClose();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+
   return (
     <PongCatBackground>
       <PongCatCount count={count} />
       <PongCatImage
+        ref={catImageRef}
         isOpen={isOpen}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
