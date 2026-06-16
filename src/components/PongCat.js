@@ -7,12 +7,15 @@ import PongCatImage from './PongCatImage';
 import Hardmode from "./Hardmode";
 import HardmodePongCat from "./HardmodePongCat";
 import SkinShop from './SkinShop';
+import SkinInventory from './SkinInventory';
 import SKIN_CATALOG from './skinCatalog';
 import popSound from '../assets/pop.mp3';
 
 const STORAGE_KEY = 'pong-cat-count';
 const OWNED_SKINS_STORAGE_KEY = 'pong-cat-owned-skins';
+const EQUIPPED_SKIN_STORAGE_KEY = 'pong-cat-equipped-skin';
 const DEFAULT_OWNED_SKINS = ['default'];
+const DEFAULT_EQUIPPED_SKIN = 'default';
 const MIN_OPEN_MS = 100;
 
 const getStoredCount = () => {
@@ -41,13 +44,26 @@ const getStoredOwnedSkinIds = () => {
   }
 };
 
+const getStoredEquippedSkinId = (ownedSkinIds) => {
+  const storedSkinId = localStorage.getItem(EQUIPPED_SKIN_STORAGE_KEY);
+  if (storedSkinId && ownedSkinIds.includes(storedSkinId)) return storedSkinId;
+  return DEFAULT_EQUIPPED_SKIN;
+};
+
 function PongCat() {
-  const [shopState, setShopState] = useState(() => ({
-    count: getStoredCount(),
-    ownedSkinIds: getStoredOwnedSkinIds(),
-  }));
-  const { count, ownedSkinIds } = shopState;
+  const [shopState, setShopState] = useState(() => {
+    const ownedSkinIds = getStoredOwnedSkinIds();
+    return {
+      count: getStoredCount(),
+      ownedSkinIds,
+      equippedSkinId: getStoredEquippedSkinId(ownedSkinIds),
+    };
+  });
+  const { count, ownedSkinIds, equippedSkinId } = shopState;
+  const equippedSkin =
+    SKIN_CATALOG.find((skin) => skin.id === equippedSkinId) || SKIN_CATALOG[0];
   const [isShopOpen, setIsShopOpen] = useState(false);
+  const [isInventoryOpen, setIsInventoryOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [floats, setFloats] = useState([]);
 
@@ -65,6 +81,10 @@ function PongCat() {
   useEffect(() => {
     localStorage.setItem(OWNED_SKINS_STORAGE_KEY, JSON.stringify(ownedSkinIds));
   }, [ownedSkinIds]);
+
+  useEffect(() => {
+    localStorage.setItem(EQUIPPED_SKIN_STORAGE_KEY, equippedSkinId);
+  }, [equippedSkinId]);
 
   const scheduleClose = () => {
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
@@ -122,9 +142,17 @@ function PongCat() {
       }
 
       return {
+        ...prev,
         count: prev.count - skin.price,
         ownedSkinIds: [...prev.ownedSkinIds, skinId],
       };
+    });
+  };
+
+  const handleEquipSkin = (skinId) => {
+    setShopState((prev) => {
+      if (!prev.ownedSkinIds.includes(skinId)) return prev;
+      return { ...prev, equippedSkinId: skinId };
     });
   };
 
@@ -139,7 +167,7 @@ function PongCat() {
   };
 
   useEffect(() => {
-    if (isHardmode || isShopOpen) return undefined;
+    if (isHardmode || isShopOpen || isInventoryOpen) return undefined;
 
     const handleKeyDown = (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -169,7 +197,11 @@ function PongCat() {
         >
           상점
         </button>
-        <button className="pong-cat-menu-button" type="button" disabled>
+        <button
+          className="pong-cat-menu-button"
+          type="button"
+          onClick={() => setIsInventoryOpen(true)}
+        >
           인벤토리
         </button>
       </div>
@@ -177,6 +209,8 @@ function PongCat() {
       {isHardmode ? (
         <HardmodePongCat
           isOpen={isOpen}
+          closedImage={equippedSkin.closedImage}
+          openImage={equippedSkin.openImage}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
         />
@@ -184,6 +218,8 @@ function PongCat() {
         <PongCatImage
           ref={catImageRef}
           isOpen={isOpen}
+          closedImage={equippedSkin.closedImage}
+          openImage={equippedSkin.openImage}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
         />
@@ -197,6 +233,14 @@ function PongCat() {
         onClose={() => setIsShopOpen(false)}
         onPurchase={handlePurchaseSkin}
         ownedSkinIds={ownedSkinIds}
+        skins={SKIN_CATALOG}
+      />
+      <SkinInventory
+        isOpen={isInventoryOpen}
+        onClose={() => setIsInventoryOpen(false)}
+        onEquip={handleEquipSkin}
+        ownedSkinIds={ownedSkinIds}
+        equippedSkinId={equippedSkinId}
         skins={SKIN_CATALOG}
       />
     </PongCatBackground>

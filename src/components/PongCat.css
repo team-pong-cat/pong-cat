@@ -1,9 +1,8 @@
 .pong-cat-bg {
   width: 100vw;
   height: 100vh;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
-  background-repeat: repeat;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -217,6 +216,16 @@
 .skin-card-locked {
   background: #eeeeee;
   color: #555555;
+}
+
+.skin-card-equipped {
+  border-color: #0f7a1f;
+  background: #efffed;
+  box-shadow: 0 0 0 2px #0f7a1f inset;
+}
+
+.skin-card-equipped .skin-card-status {
+  color: #0f7a1f;
 }
 
 .skin-preview {

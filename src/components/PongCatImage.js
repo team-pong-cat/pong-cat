@@ -1,16 +1,14 @@
 import { forwardRef } from 'react';
-import catClosed from '../assets/cat-closed.png';
-import catOpen from '../assets/cat-open.png';
 
 const PongCatImage = forwardRef(function PongCatImage(
-  { isOpen, onMouseDown, onMouseUp },
+  { isOpen, closedImage, openImage, onMouseDown, onMouseUp },
   ref
 ) {
   return (
     <img
       ref={ref}
       className={`pong-cat-img${isOpen ? ' open' : ''}`}
-      src={isOpen ? catOpen : catClosed}
+      src={isOpen ? openImage : closedImage}
       alt="pong cat"
       role="button"
       tabIndex={0}
