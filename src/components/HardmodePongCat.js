@@ -1,5 +1,3 @@
-import catOpen from "../assets/cat-open.png";
-import catClosed from "../assets/cat-closed.png";
 import whipSound from "../assets/whip.mp3";
 import { useEffect, useRef, useState } from "react";
 
@@ -22,7 +20,7 @@ const getRandomPosition = () => {
   };
 };
 
-function HardmodePongCat({ isOpen, onMouseDown, onMouseUp }) {
+function HardmodePongCat({ isOpen, closedImage, openImage, onMouseDown, onMouseUp }) {
   const [position, setPosition] = useState(() => ({
     x: Math.max(0, window.innerWidth / 2 - CAT_SIZE / 2),
     y: Math.max(0, window.innerHeight / 2 - CAT_SIZE / 2),
@@ -114,7 +112,7 @@ function HardmodePongCat({ isOpen, onMouseDown, onMouseUp }) {
     <img
       className={`pong-cat-img hardmode-pong-cat${isEvading ? ' evading' : ''}${isOpen ? ' open' : ''}`}
       style={{ left: position.x, top: position.y }}
-      src={isOpen ? catOpen : catClosed}
+      src={isOpen ? openImage : closedImage}
       alt="pong cat"
       role="button"
       tabIndex={0}
