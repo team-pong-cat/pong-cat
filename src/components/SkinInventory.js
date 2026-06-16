@@ -37,7 +37,7 @@ function SkinInventory({ isOpen, onClose, onEquip, ownedSkinIds, equippedSkinId,
           </button>
         </header>
 
-        <div className="skin-shop-grid">
+        <div className="skin-shop-grid skin-inventory-grid">
           {ownedSkins.map((skin) => {
             const isEquipped = skin.id === equippedSkinId;
             const cardClassName = [
