@@ -1,4 +1,4 @@
-import background from '../assets/background.png';
+import background from '../assets/background.webp';
 
 function PongCatBackground({ children }) {
   return (
